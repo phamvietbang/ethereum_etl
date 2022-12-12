@@ -14,3 +14,4 @@ pg8000==1.13.2
 pymongo==3.11.4
 pyetherchain==0.3.2
 QueryStateLib
+boto3

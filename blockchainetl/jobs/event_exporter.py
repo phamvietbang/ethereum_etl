@@ -2,7 +2,7 @@ from data_storage.memory_storage import MemoryStorage
 import logging
 from blockchainetl.executors.batch_work_executor import BatchWorkExecutor
 from blockchainetl.jobs.base_job import BaseJob
-from blockchainetl.mappers.receipt_log_mapper import EthReceiptLogMapper
+from blockchainetl.mappers.event_mapper import EthEventMapper
 from constants.event_constants import Event
 from web3 import Web3
 from web3.middleware import geth_poa_middleware
@@ -31,7 +31,7 @@ class ExportEventJob(BaseJob):
         self.end_block = end_block
         self.contract_addresses = contract_addresses
         self.batch_work_executor = BatchWorkExecutor(batch_size, max_workers)
-        self.receipt_log = EthReceiptLogMapper()
+        self.receipt_log = EthEventMapper()
         self.localstorage = MemoryStorage.getInstance()
         self.event_info = {}
         self.topics = []

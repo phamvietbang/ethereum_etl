@@ -1,9 +1,7 @@
 import logging
 
-from blockchainetl.jobs.block_transaction_exporter import ExportBlocksJob
+from blockchainetl.jobs.ethereum_etl.block_transaction_exporter import ExportBlocksJob
 from artifacts.abi.pancake_factory import PancakeFactoryABI
-from web3 import Web3
-from web3.middleware import geth_poa_middleware
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -19,20 +17,17 @@ class ExportCreatePairTxJob(ExportBlocksJob):
             max_workers,
             item_exporter,
             export_blocks=False,
-            export_transactions=True
+            export_transactions=True,
     ):
-        super().__init__(start_block, end_block, batch_size, batch_web3_provider, max_workers, item_exporter,
+        super().__init__(chain, start_block, end_block, batch_size, batch_web3_provider, max_workers, item_exporter,
                          export_blocks, export_transactions)
         self.chain = chain
         self.result = []
-        self.w3 = Web3(batch_web3_provider)
-        self.w3.middleware_onion.inject(geth_poa_middleware, layer=0)
         self.pancake_factory_contract = self.w3.eth.contract(
             address=self.w3.toChecksumAddress("0xca143ce32fe78f1f7019d7d551a6402fc5350c73"),
             abi=PancakeFactoryABI)
 
     def _export_block(self, block):
-        _LOGGER.info(f'Get tx data from {block[0]} to {block[-1]}')
         for tx in block.transactions:
             tx_dict = self.transaction_mapper.transaction_to_dict(tx)
             tx_dict["_id"] = tx_dict["hash"]
