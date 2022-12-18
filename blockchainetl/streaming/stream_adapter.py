@@ -8,6 +8,7 @@ from blockchainetl.jobs.holder_exporter import ExportHolderJob
 from blockchainetl.jobs.lp_token_exporter import ExportLPTokenJob
 from blockchainetl.jobs.create_pair_tx_exporter import ExportCreatePairTxJob
 from constants.job_constant import Job
+from artifacts.abi.events.transfer_event_abi import TRANSFER_EVENT_ABI
 
 
 class StreamAdapter:
@@ -58,6 +59,8 @@ class StreamAdapter:
 
     def _export_token_transfers(self, start_block, end_block):
         if Job.EVENT in self.type:
+            if not self.event_abi:
+                self.event_abi = TRANSFER_EVENT_ABI
             job = ExportEventJob(
                 chain=self.chain,
                 start_block=start_block,

@@ -29,6 +29,7 @@ from blockchainetl.cli.ethereum_etl.log_exporter import export_logs
 from blockchainetl.cli.ethereum_etl.trace_exporter import export_traces
 from blockchainetl.cli.ethereum_etl.geth_trace_exporter import export_geth_traces
 from blockchainetl.cli.ethereum_etl.stream_exporter import export_blocks_transactions_logs
+from blockchainetl.cli.ethereum_etl.stream_eth import stream_eth
 from blockchainetl.cli.stream import stream
 
 
@@ -39,6 +40,7 @@ def cli(ctx):
     pass
 
 cli.add_command(export_events, "export_events")
+cli.add_command(stream_eth, 'stream_eth')
 cli.add_command(export_lp_tokens, "export_lp_tokens")
 cli.add_command(export_create_pair_transactions, "export_create_pair_transactions")
 cli.add_command(export_holders, "export_holders")

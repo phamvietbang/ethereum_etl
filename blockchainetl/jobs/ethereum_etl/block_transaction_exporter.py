@@ -85,11 +85,11 @@ class ExportBlocksJob(BaseJob):
         response = self.batch_web3_provider.make_batch_request(json.dumps(blocks_rpc))
         results = rpc_response_batch_to_results(response)
         blocks = [self.block_mapper.json_dict_to_block(result) for result in results]
-        txs = []
+        # txs = []
         for block in blocks:
-            txs += self._export_block(block)
-        if txs:
-            self.item_exporter.export_items(self.chain, "transactions", txs, f'{block_number_batch[0]}_{block_number_batch[-1]}')
+            self._export_block(block)
+        # if txs:
+        #     self.item_exporter.export_items(self.chain, "transactions", txs, f'{block_number_batch[0]}_{block_number_batch[-1]}')
 
     def _export_block(self, block):
         if self.export_blocks:
@@ -99,7 +99,9 @@ class ExportBlocksJob(BaseJob):
             txs = []
             for tx in block.transactions:
                 tx_dict = self.transaction_mapper.transaction_to_dict(tx)
+                # tx_dict["_id"] = tx_dict["hash"]
                 txs.append(tx_dict)
+            self.item_exporter.export_items(self.chain, "transactions", txs)
 
             return txs
 

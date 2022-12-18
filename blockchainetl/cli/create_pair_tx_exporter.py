@@ -22,8 +22,9 @@ logging_basic_config()
               help='The output file for transactions. '
                    'If not provided transactions will not be exported. Use "-" for stdout')
 @click.option('-c', '--chain', default='bsc', show_default=True, type=str, help='The chain network to connect to.')
+@click.option('-f', '--factory', default=None, show_default=True, type=str, help='The pancake swap factory.')
 def export_create_pair_transactions(start_block, end_block, batch_size, provider_uri, max_workers,
-                                    output, chain):
+                                    output, chain, factory):
     """Exports blocks and transactions."""
     if output is None:
         raise ValueError('Either --blocks-output or --transactions-output options must be provided')
@@ -36,5 +37,7 @@ def export_create_pair_transactions(start_block, end_block, batch_size, provider
         batch_web3_provider=ThreadLocalProxy(lambda: get_provider_from_uri(provider_uri, batch=True)),
         max_workers=max_workers,
         item_exporter=item,
-        export_transactions=output is not None)
+        export_transactions=output is not None,
+        factory=factory
+    )
     job.run()

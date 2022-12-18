@@ -49,7 +49,7 @@ class ExportEventJob(BaseJob):
 
     def _end(self):
         self.batch_work_executor.shutdown()
-        self.item_exporter.export_items(self.chain, "logs", self.event_data)
+        self.item_exporter.export_items(self.chain, "events", self.event_data)
         self.item_exporter.close()
         _LOGGER.info(f'Crawled {len(self.event_data)} events from {self.start_block} to {self.end_block}!')
 

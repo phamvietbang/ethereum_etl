@@ -1,5 +1,9 @@
 import json
+import time
+import logging
 import boto3
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class S3StreamingExporter(object):
@@ -19,32 +23,57 @@ class S3StreamingExporter(object):
             )
         self.s3_client = self.session.client('s3')
 
-    # def export_items(self, chain, folder, data):
-    #     for data_dict in data:
-    #         data_string = json.dumps(data_dict, indent=2, default=str)
-    #         if folder == "transactions":
-    #             self.s3_client.put_object(
-    #                 Bucket=self.bucket,
-    #                 Key=f'{chain}/{folder}/{data_dict["hash"]}',
-    #                 Body=data_string
-    #             )
-    #         if folder == "logs":
-    #             self.s3_client.put_object(
-    #                 Bucket=self.bucket,
-    #                 Key=f'{chain}/{folder}/{data_dict["block_number"]}_{data_dict["log_index"]}',
-    #                 Body=data_string
-    #             )
-
-    def export_items(self, chain, folder, data, file_name=None):
-        # for data_dict in data:
-        if not data:
-            return
-        data_string = json.dumps(data, indent=2, default=str)
-        self.s3_client.put_object(
+    def export_items(self, chain, folder, data):
+        for data_dict in data:
+            data_string = json.dumps(data_dict, default=str)
+            if folder == "transactions":
+                self.s3_client.put_object(
                     Bucket=self.bucket,
-                    Key=f'{chain}/{folder}/{file_name}',
+                    Key=f'{chain}/{folder}/{data_dict["hash"]}',
                     Body=data_string
                 )
+            if folder == "logs":
+                self.s3_client.put_object(
+                    Bucket=self.bucket,
+                    Key=f'{chain}/{folder}/{data_dict["block_number"]}_{data_dict["log_index"]}',
+                    Body=data_string
+                )
+
+    def export_lp_tokens(self, chain, folder, data):
+        for data_dict in data:
+            data_string = json.dumps(data_dict, default=str)
+            self.s3_client.put_object(
+                Bucket=self.bucket,
+                Key=f'{chain}/{folder}/{data_dict["lp_token"]}',
+                Body=data_string
+            )
+
+    def export_holders(self, chain, folder, data):
+        for data_dict in data:
+            data_string = json.dumps(data_dict, default=str)
+            self.s3_client.put_object(
+                Bucket=self.bucket,
+                Key=f'{chain}/{folder}/{data_dict["lp_token"]}_{data_dict["address"]}',
+                Body=data_string
+            )
+
+    def export_tokens(self, chain, folder, data):
+        for data_dict in data:
+            data_string = json.dumps(data_dict, default=str)
+            self.s3_client.put_object(
+                Bucket=self.bucket,
+                Key=f'{chain}/{folder}/{data_dict["address"]}',
+                Body=data_string
+            )
+
+    def get_collector(self, chain, stream_id):
+        pass
+
+    def update_collector(self, chain, stream_id):
+        pass
+
+    def update_latest_updated_at(self, chain, stream_id, file):
+        pass
 
     def close(self):
         pass

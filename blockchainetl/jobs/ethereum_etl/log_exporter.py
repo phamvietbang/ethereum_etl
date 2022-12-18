@@ -30,11 +30,13 @@ class ExportLogJob(BaseJob):
         self.contract_addresses = contract_addresses
 
     def _start(self):
+        self.logs = []
         self.item_exporter.open()
         _LOGGER.info(f'start crawl events')
 
     def _end(self):
         self.batch_work_executor.shutdown()
+        self.item_exporter.export_items(self.chain, "logs", self.logs)
         self.item_exporter.close()
         _LOGGER.info(f'Crawled events from {self.start_block} to {self.end_block}!')
 
@@ -59,10 +61,11 @@ class ExportLogJob(BaseJob):
 
         log_filter = self.web3.eth.filter(filter_params)
         logs = log_filter.get_all_entries()
-        result = []
         for log in logs:
             log = self.receipt_log.web3_dict_to_receipt_log(log)
-            result.append(self.receipt_log.log_to_dict(log))
-        self.item_exporter.export_items(self.chain, "logs", result, f"{start_block}_{end_block}")
+            log = self.receipt_log.log_to_dict(log)
+            # log['_id'] = f"{log['block_number']}_{log['log_index']}"
+            if log not in self.logs:
+                self.logs.append(log)
 
         self.web3.eth.uninstallFilter(log_filter.filter_id)
