@@ -35,8 +35,8 @@ class EthEventMapper(object):
 
     def eth_event_to_dict(self, eth_event: EthEvent):
         d1 = {
-            'type': 'event',
-            'event_type': convert_even_type(eth_event.event_type),
+            # 'type': 'event',
+            # 'event_type': convert_even_type(eth_event.event_type),
             'contract_address': eth_event.contract_address,
             'transaction_hash': eth_event.transaction_hash,
             'log_index': eth_event.log_index,
@@ -59,7 +59,6 @@ class EthEventMapper(object):
 
     def web3_dict_to_receipt_log(self, dict):
         receipt_log = EthReceiptLog()
-
         receipt_log.log_index = dict.get('logIndex')
         receipt_log.transaction_index = dict.get('transactionIndex')
         transaction_hash = dict.get('transactionHash')
@@ -89,8 +88,8 @@ class EthEventMapper(object):
             return data
 
     def is_integers(self, type):
-        return type in {"uint256" , "uint128" , "uint64" , "uint32" , "uint16" , "uint8" , "uint" \
-               , "int256" , "init128" , "init64" , "init32" , "init16" , "init8" , "init"}
+        return type in {"uint256", "uint128", "uint64", "uint32", "uint16", "uint8", "uint" \
+            , "int256", "init128", "init64", "init32", "init16", "init8", "init"}
 
     def extract_event_from_log(self, receipt_log, event_subscriber):
         topics = receipt_log.topics
@@ -121,7 +120,7 @@ class EthEventMapper(object):
                 name = param_i.get("name")
                 type = param_i.get("type")
                 data = topics_with_data[i]
-                event.params[name] = str(self.decode_data_by_type(data, type))
+                event.params[name] = self.decode_data_by_type(data, type)
             return event
 
         return None

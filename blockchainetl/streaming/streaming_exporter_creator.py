@@ -1,7 +1,7 @@
 from blockchainetl.streaming.exporter.mongo_streaming_exporter import MongodbStreamingExporter
 from blockchainetl.streaming.exporter.s3_streaming_exporter import S3StreamingExporter
 from blockchainetl.streaming.exporter.athena_s3_streaming_exporter import AthenaS3StreamingExporter
-
+from blockchainetl.streaming.exporter.streaming_exporter_interface import StreamingExporterInterface
 
 def create_steaming_exporter(output):
     streaming_exporter_type = determine_item_exporter_type(output)
@@ -20,7 +20,7 @@ def create_steaming_exporter(output):
             region = items[-1]
         streaming_exporter = AthenaS3StreamingExporter(items[1], items[2], items[3], items[4], region)
     else:
-        streaming_exporter = None
+        streaming_exporter = StreamingExporterInterface()
     return streaming_exporter
 
 

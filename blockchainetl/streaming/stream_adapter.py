@@ -1,23 +1,21 @@
-import os
-import pathlib
-
 from web3 import Web3
 from web3.middleware import geth_poa_middleware
-from blockchainetl.jobs.event_exporter import ExportEventJob
+from blockchainetl.jobs.events.event_exporter import ExportEventJob
 from blockchainetl.jobs.holder_exporter import ExportHolderJob
 from blockchainetl.jobs.lp_token_exporter import ExportLPTokenJob
 from blockchainetl.jobs.create_pair_tx_exporter import ExportCreatePairTxJob
 from constants.job_constant import Job
 from artifacts.abi.events.transfer_event_abi import TRANSFER_EVENT_ABI
+from blockchainetl.streaming.exporter.streaming_exporter_interface import StreamingExporterInterface
 
 
 class StreamAdapter:
     def __init__(
             self,
             chain,
-            item_importer,
-            item_exporter,
             provider,
+            item_importer: StreamingExporterInterface,
+            item_exporter: StreamingExporterInterface,
             batch_size=96,
             max_workers=8,
             event_abi=None,

@@ -1,6 +1,6 @@
 import click
 
-from blockchainetl.jobs.event_exporter import ExportEventJob
+from blockchainetl.jobs.events.event_exporter import ExportEventJob
 from utils.logging_utils import logging_basic_config
 from blockchainetl.providers.auto import get_provider_from_uri
 from blockchainetl.streaming.streaming_exporter_creator import create_steaming_exporter

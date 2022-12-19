@@ -3,12 +3,12 @@ TRANSFER_EVENT_ABI = [{
         "inputs": [
             {
                 "indexed": True,
-                "name": "from",
+                "name": "from_address",
                 "type": "address"
             },
             {
                 "indexed": True,
-                "name": "to",
+                "name": "to_address",
                 "type": "address"
             },
             {

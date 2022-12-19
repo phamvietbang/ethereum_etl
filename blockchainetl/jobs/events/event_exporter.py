@@ -83,10 +83,6 @@ class ExportEventJob(BaseJob):
             eth_event = self.receipt_log.extract_event_from_log(log, event_subscriber[log.topics[0]])
             if eth_event is not None:
                 eth_event_dict = self.receipt_log.eth_event_to_dict(eth_event)
-                event_type = eth_event_dict.get(Event.event_type)
-                block_number = eth_event_dict.get(Event.block_number)
-                log_index = eth_event_dict.get(Event.log_index)
-                eth_event_dict['_id'] = f"{event_type}_{block_number}_{log_index}"
                 events_list.append(eth_event_dict)
 
         self.web3.eth.uninstallFilter(event_filter.filter_id)

@@ -7,7 +7,7 @@ class StreamingExporterInterface(object):
     """Manages connection to  database and makes async queries
     """
 
-    def __init__(self, connection_url, collector_id):
+    def __init__(self):
         self._conn = None
 
     def get_collector(self, collector_id):

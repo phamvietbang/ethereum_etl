@@ -84,6 +84,7 @@ class ExportMiaHolderJob(BaseJob):
 
 
 if __name__ == '__main__':
+    # AKIAXS2SFBSOTZFERP5O@GNHZ5JvbSoz5L8gjEvEbC0BRfk/XzuE7aHYLuycs@bangbich123@us-east-1
     exporter = S3StreamingExporter(access_key="",
                                    secret_key="",
                                    bucket="bangbich123",

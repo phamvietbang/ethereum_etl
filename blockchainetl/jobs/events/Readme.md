@@ -1,0 +1,4 @@
+## Code crawl dữ liệu [event transfer](https://github.com/phamvietbang/ethereum_etl/tree/main/blockchainetl/jobs/events/event_exporter.py) liên tục từ block 0 chạy code bằng câu lệnh dưới
+* python3 ethereumetl.py stream --output "s3@access_key@secret_key@bucket@aws_region" -p "https://rpc.onuschain.io/" -c onus --stream-type event
+## Code tạo bảng [event transfer](https://github.com/phamvietbang/ethereum_etl/tree/main/blockchainetl/jobs/events/create_event_table.sql)
+## Code query tính lượng balance của cá địa chỉ chuyển và nhận [token](https://github.com/phamvietbang/ethereum_etl/tree/main/blockchainetl/jobs/events/token_balance.sql)
