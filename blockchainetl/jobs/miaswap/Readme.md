@@ -8,4 +8,4 @@
 * Lấy danh sách các lp token mà địa chỉ từng hold. Dữ liệu được lấy từ bảng holders
 ### Code lưu dữ liệu trên [s3](https://github.com/phamvietbang/ethereum_etl/tree/main/blockchainetl/streaming/exporter/s3_streaming_exporter.py)
 ### Code lấy dữ liệu s3 bằng [athena](https://github.com/phamvietbang/ethereum_etl/tree/main/blockchainetl/streaming/exporter/athena_s3_streaming_exporter.py)
-* Cấu trúc dữ liệu các bảng được thể hiện trong code của lấy dữ liệu s3 bằng athena
+* Cấu trúc dữ liệu các bảng được thể hiện trong code tạo bảng của lấy dữ liệu s3 bằng athena
