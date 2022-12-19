@@ -1,8 +1,9 @@
 import logging
-
+import web3
 from blockchainetl.executors.batch_work_executor import BatchWorkExecutor
 from blockchainetl.jobs.base_job import BaseJob
 from blockchainetl.streaming.exporter.athena_s3_streaming_exporter import AthenaS3StreamingExporter
+from blockchainetl.streaming.exporter.s3_streaming_exporter import S3StreamingExporter
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -18,10 +19,10 @@ class ExportMiaHolderJob(BaseJob):
             batch_size,
             max_workers,
             item_importer: AthenaS3StreamingExporter,
-            item_exporter,
+            item_exporter: S3StreamingExporter,
     ):
         self.chain = chain
-        self.result = []
+        # self.result = []
         self.item_exporter = item_exporter
         self.item_importer = item_importer
         self.end_block = end_block
@@ -40,7 +41,6 @@ class ExportMiaHolderJob(BaseJob):
 
     def _end(self):
         self.batch_work_executor.shutdown()
-        self.item_exporter.export_holders(self.chain, "addresses", self.result)
         self.item_exporter.close()
         self.item_importer.close()
 
@@ -55,27 +55,42 @@ class ExportMiaHolderJob(BaseJob):
         while not self.item_importer.has_query_succeeded(executed_id):
             break
         logs = self.item_importer.get_log_data(executed_id)
-        tokens,  events, holders = [], [], []
+        tokens, events, holders = [], [], []
         for event in logs:
             if event["address"] not in tokens:
-                events.append(event)
                 tokens.append(event["address"])
 
         executed_id = self.item_importer.get_lp_token_by_addresses(self.chain, set(tokens))
         while not self.item_importer.has_query_succeeded(executed_id):
             break
         lp_tokens = self.item_importer.get_lp_token_data(executed_id)
-
         lp_token_addresses = [lp_token["lp_token"] for lp_token in lp_tokens]
-        for event in events:
+        result = []
+        for event in logs:
             if event["address"] in lp_token_addresses:
-                if event["topics"][1] != NATIVE_ADDRESS and event["topics"][1] not in lp_token_addresses:
-                    self.result.append({
+                from_address = web3.Web3.toChecksumAddress(f'0x{event["topics"][1][-40:]}')
+                to_address = web3.Web3.toChecksumAddress(f'0x{event["topics"][2][-40:]}')
+                if from_address != NATIVE_ADDRESS and from_address not in lp_token_addresses:
+                    result.append({
                         "lp_token": event["address"],
-                        "address": event["topics"][1]
+                        "address": from_address
                     })
-                if event["topics"][2] != NATIVE_ADDRESS and event["topics"][2] not in lp_token_addresses:
-                    self.result.append({
+                if to_address != NATIVE_ADDRESS and to_address not in lp_token_addresses:
+                    result.append({
                         "lp_token": event["address"],
-                        "address": event["topics"][2]
+                        "address": to_address
                     })
+        self.item_exporter.export_holders(self.chain, "holders", result)
+
+
+if __name__ == '__main__':
+    exporter = S3StreamingExporter(access_key="",
+                                   secret_key="",
+                                   bucket="bangbich123",
+                                   aws_region="us-east-1")
+    importer = AthenaS3StreamingExporter("",
+                                         "",
+                                         "bangbich123",
+                                         "onus", "us-east-1")
+    job = ExportMiaHolderJob('onus', 487281, 487283, 10, 4, importer, exporter)
+    job.run()

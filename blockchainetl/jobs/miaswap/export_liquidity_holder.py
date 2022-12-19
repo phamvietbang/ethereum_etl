@@ -42,19 +42,20 @@ class ExportPairTokens:
 
 
 if __name__ == "__main__":
-    importer = AthenaS3StreamingExporter("",
-                                         "",
-                                         "bangbich123",
-                                         "onus", "us-east-1")
+    # '0x66d899B8673f793507B6cd7B499688edc1711bc6'
     exporter = S3StreamingExporter(access_key="",
                                    secret_key="",
                                    bucket="bangbich123",
                                    aws_region="us-east-1")
+    importer = AthenaS3StreamingExporter("",
+                                         "",
+                                         "bangbich123",
+                                         "onus", "us-east-1")
     job = ExportPairTokens(importer=importer,
                            exporter=exporter,
                            chain="onus",
                            provider="https://rpc.onuschain.io/",
                            factory="0xA5DA4dC244c7aD33a0D8a10Ed5d8cFf078E86Ef3")
 
-    job.get_liquidity_of_holder("0x35d07e7bd34c5cd4f526193eb4926701ff942cc2")
+    job.get_liquidity_of_holder("0xfd409aAd331aCBfa938E7eb0ed598E25B3168E97")
 
