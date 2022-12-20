@@ -1,0 +1,4 @@
+## Code crawl created tx và lp token information tách từ [tx](https://github.com/phamvietbang/ethereum_etl/tree/main/blockchainetl/jobs/lptokens/create_pair_tx_exporter.py). Câu lệnh chạy tự động liên tục
+stream -b 100 --output "s3@access_key@Gsecret_key@bucket@aws_region" -p "https://bsc-dataseed1.binance.org/" -c bsc --stream-type transaction
+## Tạo bảng [lp_token](https://github.com/phamvietbang/ethereum_etl/tree/main/blockchainetl/jobs/lptokens/create_lp_table.sql)
+## Query danh sách holder và lượng liquidity của [chúng](https://github.com/phamvietbang/ethereum_etl/tree/main/blockchainetl/jobs/lptokens/liquidity_holders.sql)

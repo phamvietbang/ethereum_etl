@@ -3,7 +3,7 @@ from web3.middleware import geth_poa_middleware
 from blockchainetl.jobs.events.event_exporter import ExportEventJob
 from blockchainetl.jobs.holder_exporter import ExportHolderJob
 from blockchainetl.jobs.lp_token_exporter import ExportLPTokenJob
-from blockchainetl.jobs.create_pair_tx_exporter import ExportCreatePairTxJob
+from blockchainetl.jobs.lptokens.create_pair_tx_exporter import ExportCreatePairTxJob
 from constants.job_constant import Job
 from artifacts.abi.events.transfer_event_abi import TRANSFER_EVENT_ABI
 from blockchainetl.streaming.exporter.streaming_exporter_interface import StreamingExporterInterface

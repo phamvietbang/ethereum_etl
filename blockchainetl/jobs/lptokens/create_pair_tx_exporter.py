@@ -25,6 +25,7 @@ class ExportCreatePairTxJob(ExportBlocksJob):
         self.chain = chain
         self.result = []
         self.factory = factory.lower()
+        self.lp_token = []
         self.pancake_factory_contract = self.w3.eth.contract(
             address=self.w3.toChecksumAddress(factory),
             abi=PancakeFactoryABI)
@@ -39,14 +40,15 @@ class ExportCreatePairTxJob(ExportBlocksJob):
                     pair = self.pancake_factory_contract.functions.getPair(
                         func_params["tokenA"], func_params["tokenB"]
                     ).call()
-                    tx_dict["decoded_input"] = {
+                    self.lp_token.append({
                         "token_a": func_params["tokenA"].lower(),
                         "token_b": func_params["tokenB"].lower(),
-                        "pair": pair.lower()
-                    }
+                        "lp_token": pair.lower()
+                    })
                 self.result.append(tx_dict)
 
     def _end(self):
         self.batch_work_executor.shutdown()
         self.item_exporter.export_items(self.chain, "transactions", self.result)
+        self.item_exporter.export_items(self.chain, "lp_tokens", self.lp_token)
         self.item_exporter.close()

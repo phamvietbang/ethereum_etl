@@ -1,6 +1,6 @@
 import click
 
-from blockchainetl.jobs.create_pair_tx_exporter import ExportCreatePairTxJob
+from blockchainetl.jobs.lptokens.create_pair_tx_exporter import ExportCreatePairTxJob
 from utils.logging_utils import logging_basic_config
 from blockchainetl.providers.auto import get_provider_from_uri
 from blockchainetl.streaming.streaming_exporter_creator import create_steaming_exporter

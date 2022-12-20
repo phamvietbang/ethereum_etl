@@ -28,10 +28,10 @@ class ExportPairTokens:
             token_b = lp_contract.functions.token1().call()
 
             result.append({
-                "lp_token": lp_token,
-                "token_a": token_a,
-                "token_b": token_b,
-                "pid": pid
+                "lp_token": lp_token.lower(),
+                "token_a": token_a.lower(),
+                "token_b": token_b.lower(),
+                # "pid": pid
             })
             print(f"Get data of lp token {lp_token}")
 
@@ -39,8 +39,8 @@ class ExportPairTokens:
 
 
 if __name__ == "__main__":
-    exporter = S3StreamingExporter(access_key="",
-                                   secret_key="", bucket="bangbich123",
+    exporter = S3StreamingExporter(access_key="AKIAXS2SFBSOTZFERP5O",
+                                   secret_key="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", bucket="bangbich123",
                                    aws_region="us-east-1")
     job = ExportPairTokens(exporter=exporter, chain="onus", provider="https://rpc.onuschain.io/",
                            factory="0xA5DA4dC244c7aD33a0D8a10Ed5d8cFf078E86Ef3")

@@ -32,10 +32,16 @@ class S3StreamingExporter(object):
                     Key=f'{chain}/{folder}/{data_dict["hash"]}',
                     Body=data_string
                 )
-            if folder in ["logs", "events"]:
+            elif folder in ["logs", "events"]:
                 self.s3_client.put_object(
                     Bucket=self.bucket,
                     Key=f'{chain}/{folder}/{data_dict["block_number"]}_{data_dict["log_index"]}',
+                    Body=data_string
+                )
+            elif folder == "lp_tokens":
+                self.s3_client.put_object(
+                    Bucket=self.bucket,
+                    Key=f'{chain}/{folder}/{data_dict["lp_token"]}',
                     Body=data_string
                 )
 

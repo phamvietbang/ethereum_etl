@@ -18,7 +18,7 @@ from constants.job_constant import Job
 @click.option('--period-seconds', default=1, show_default=True, type=int,
               help='How many seconds to sleep between syncs')
 @click.option('-s', '--start-block', default=0, show_default=True, type=int, help='Start block')
-@click.option('-e', '--end-block', required=True, type=int, help='End block')
+@click.option('-e', '--end-block', required=False, type=int, help='End block')
 @click.option('-b', '--batch-size', default=100, show_default=True, type=int,
               help='The number of blocks to export at a time.')
 @click.option('-B', '--streamer_batch_size', default=500, show_default=True, type=int,
