@@ -1,16 +1,19 @@
-with token_balance as (
-    -- debits
-    select to_address as address, contract_address as token, value as value
-    from onus.events
-    where to_address != '0x0000000000000000000000000000000000000000'
-    union all
-    -- credits
-    select from_address as address, contract_address as token, -value as value
-    from onus.events
-    where from_address != '0x0000000000000000000000000000000000000000'
-    )
-select address, token, sum(value) as balance
-from token_balance
-group by address, token
-order by balance desc
-limit 10
+CREATE EXTERNAL TABLE IF NOT EXISTS `onus`.`events` (
+  `contract_address` string,
+  `transaction_hash` string,
+  `log_index` bigint,
+  `block_number` bigint,
+  `from_address` string,
+  `to_address` string,
+  `value` double
+)
+ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
+WITH SERDEPROPERTIES (
+  'ignore.malformed.json' = 'FALSE',
+  'dots.in.keys' = 'FALSE',
+  'case.insensitive' = 'TRUE',
+  'mapping' = 'TRUE'
+)
+STORED AS INPUTFORMAT 'org.apache.hadoop.mapred.TextInputFormat' OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
+LOCATION 's3://bangbich123/onus/events/'
+TBLPROPERTIES ('classification' = 'json');
